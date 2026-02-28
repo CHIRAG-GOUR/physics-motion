@@ -1,4 +1,3 @@
-
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 
 export default function TopProgressBar() {
@@ -11,53 +10,56 @@ export default function TopProgressBar() {
         restDelta: 0.001
     });
 
-    // The progress bar fill uses scaleX
-    const scaleX = smoothProgress;
-
-    // The car will move from 0% to 100% across the viewport width
-    const carX = useTransform(smoothProgress, [0, 1], ["0%", "100vw"]);
+    // By mapping scroll progress to % width, we can use it to pinpoint exact attachment
+    const progressPercent = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
 
     return (
-        <div className="fixed top-0 left-0 right-0 h-1.5 z-50 pointer-events-none">
-            {/* Background Track (No longer visible so the smoke pops better) */}
-            <div className="absolute inset-0" />
+        // The track stops exactly 4rem (w-16) from the right edge, giving the 4rem long car perfect space to dock.
+        <div className="fixed top-0 left-0 right-16 h-1.5 z-50 pointer-events-none">
 
-            {/* The smoke-styled progress bar fill */}
+            {/* The smoke-styled progress bar fill using width to avoid stretching the inner gradient */}
             <motion.div
-                className="absolute top-0 bottom-0 left-0 right-0 bg-gradient-to-r from-transparent via-gray-300 to-gray-500 origin-left shadow-[0_2px_10px_rgba(107,114,128,0.5)] z-10"
-                style={{ scaleX }}
-            />
-
-            {/* The Car leaving smoke (independent of scaleX, sits in front of the bar) */}
-            <motion.div
-                className="absolute top-1/2 -translate-y-1/2 flex items-center -ml-12 z-20"
-                style={{ x: carX }}
+                className="absolute top-0 bottom-0 left-0 z-10 overflow-hidden shadow-[0_2px_10px_rgba(107,114,128,0.5)] rounded-r-full bg-gray-400"
+                style={{ width: progressPercent }}
             >
-                {/* Animated Smoke Trails right behind the car exhaust */}
-                <div className="relative w-16 h-8 -mr-8 flex items-center">
+                {/* Flowing animated smoke gradient inside the exact width of the progress bar */}
+                <motion.div
+                    className="absolute inset-0 w-[200vw] bg-gradient-to-r from-gray-200 via-gray-500 to-gray-400 opacity-90"
+                    animate={{ x: ["0%", "-50%"] }}
+                    transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
+                />
+            </motion.div>
+
+            {/* The Car seamlessly attached to the exact end of the progress bar */}
+            <motion.div
+                className="absolute top-1/2 -translate-y-1/2 z-20 flex items-center"
+                style={{ left: progressPercent }}
+            >
+                {/* Animated Smoke Trails right at the exhaust (behind the car) */}
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center">
                     {[...Array(5)].map((_, i) => (
                         <motion.div
                             key={i}
-                            className="absolute right-0 w-5 h-5 rounded-full bg-gray-300/80 blur-[2px]"
+                            className="absolute left-0 w-3 h-3 rounded-full bg-gray-400/80 blur-[1px]"
                             animate={{
-                                x: [-10, -50 - (Math.random() * 20)],
-                                y: [(Math.random() - 0.5) * 15, (Math.random() - 0.5) * 35],
-                                scale: [1, 2.5 + Math.random()],
+                                x: [0, -25 - (Math.random() * 15)],
+                                y: [(Math.random() - 0.5) * 10, (Math.random() - 0.5) * 20],
+                                scale: [1, 1.5 + Math.random()],
                                 opacity: [0.9, 0]
                             }}
                             transition={{
-                                duration: 0.8 + Math.random() * 0.5,
+                                duration: 0.5 + Math.random() * 0.5,
                                 repeat: Infinity,
-                                delay: i * 0.2
+                                delay: i * 0.1
                             }}
                         />
                     ))}
                 </div>
 
-                {/* SVG Thicker Lamborghini Silhouette */}
+                {/* SVG Smaller Lamborghini Silhouette attached exactly with no gaps */}
                 <svg
                     viewBox="0 0 120 35"
-                    className="w-28 h-8 drop-shadow-[0_6px_8px_rgba(0,0,0,0.6)] z-30 text-rose-600 fill-current ml-6"
+                    className="w-16 h-5 drop-shadow-[0_3px_5px_rgba(0,0,0,0.6)] z-30 text-rose-600 fill-current -ml-1"
                 >
                     {/* Aggressive angled thicker body */}
                     <path d="M5,28 L15,15 L35,12 L50,10 L75,12 L105,20 L115,28 L115,30 L5,30 Z" />
