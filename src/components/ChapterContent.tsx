@@ -92,26 +92,43 @@ export default function ChapterContent() {
                 <VideoFrame url="jggrSjc1if0" />
 
                 {/* Module 1 Section */}
-                <div className="p-12 rounded-[3rem] bg-white border-8 border-blue-200 shadow-[0_16px_0_0_rgba(191,219,254,1)] relative overflow-hidden transform transition-transform hover:-translate-y-2">
-                    <div className="absolute -right-20 -top-20 w-80 h-80 bg-pastel-blue rounded-[40%_60%_70%_30%] blur-3xl opacity-50 animate-[spin_10s_linear_infinite]"></div>
+                <motion.div
+                    className="p-12 rounded-[3rem] bg-white border-8 border-blue-200 shadow-[0_16px_0_0_rgba(191,219,254,1)] relative overflow-hidden group cursor-default"
+                    whileHover={{ y: -8, scale: 1.01 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                    <div className="absolute -right-20 -top-20 w-80 h-80 bg-pastel-blue rounded-[40%_60%_70%_30%] blur-3xl opacity-50 animate-[spin_10s_linear_infinite] group-hover:scale-125 transition-transform duration-700"></div>
 
                     <motion.h2
-                        className="text-4xl font-extrabold text-blue-900 mb-8 inline-block bg-pastel-blue px-8 py-3 rounded-[2rem] border-4 border-blue-300 shadow-sm cursor-default relative z-10"
+                        className="text-4xl font-extrabold text-blue-900 mb-8 inline-block bg-pastel-blue px-8 py-3 rounded-[2rem] border-4 border-blue-300 shadow-sm relative z-10"
                         whileHover={{ scale: 1.05, rotate: 2 }}
                     >
                         Module 1: The Basics of Motion & Displacement 📐
                     </motion.h2>
 
-                    <p className="text-gray-700 text-2xl mb-10 leading-relaxed font-medium relative z-10">
+                    <p className="text-gray-700 text-2xl mb-10 leading-relaxed font-medium relative z-10 transform transition-transform group-hover:translate-x-2">
                         This module covers how we define "rest" versus "motion" and the critical difference between the path traveled and the actual change in position.
                     </p>
 
-                    <div className="bg-blue-50/50 border-4 border-blue-100 rounded-[2.5rem] p-10 shadow-inner relative z-10">
-                        <h3 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-4">
-                            <span className="bg-blue-500 shadow-md w-14 h-14 rounded-full flex items-center justify-center text-white text-2xl border-4 border-blue-600">1</span>
-                            Describe the position of an object
+                    <div className="bg-blue-50/50 border-4 border-blue-100 rounded-[2.5rem] p-10 shadow-inner relative z-10 group/card transition-colors hover:bg-blue-100/50">
+                        <h3 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-6">
+
+                            {/* Codepen oNXqJgx Inspired Circular Progress Indicator */}
+                            <div className="relative w-16 h-16 flex items-center justify-center group-hover/card:scale-110 transition-transform">
+                                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                                    <path className="stroke-blue-200" strokeWidth="4" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <motion.path
+                                        className="stroke-blue-600" strokeWidth="4" strokeDasharray="100, 100" fill="none"
+                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                        initial={{ strokeDashoffset: 100 }} whileInView={{ strokeDashoffset: 60 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 1.5, ease: "easeInOut" }}
+                                    />
+                                </svg>
+                                <div className="absolute text-blue-900 text-2xl font-black">1</div>
+                            </div>
+
+                            <span className="group-hover/card:text-blue-700 transition-colors">Describe the position of an object</span>
                         </h3>
-                        <p className="text-gray-800 text-xl mb-8 leading-relaxed bg-white p-8 rounded-[2rem] border-4 border-gray-100 shadow-sm">
+                        <p className="text-gray-800 text-xl mb-8 leading-relaxed bg-white p-8 rounded-[2rem] border-4 border-gray-100 shadow-sm transition-transform hover:-translate-y-2">
                             <b className="text-blue-900">Reference Point (Origin):</b> To describe the position of an object, we need a starting point. Motion is relative; for example, a tree is "moving" to someone in a bus but "at rest" to someone on the sidewalk.
                         </p>
 
@@ -125,7 +142,7 @@ export default function ChapterContent() {
                             </ul>
                         </div>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Discussion Card - FluidGlass */}
                 <FluidGlass>
@@ -141,21 +158,37 @@ export default function ChapterContent() {
                 </FluidGlass>
 
                 {/* Motion is Relative */}
-                <div className="p-12 rounded-[3rem] bg-white border-8 border-yellow-200 shadow-[0_16px_0_0_rgba(254,240,138,1)] transform transition-transform hover:-translate-y-2">
+                <motion.div
+                    className="p-12 rounded-[3rem] bg-white border-8 border-yellow-200 shadow-[0_16px_0_0_rgba(254,240,138,1)] cursor-default group"
+                    whileHover={{ y: -8, scale: 1.01 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
                     <motion.h2
-                        className="text-4xl font-extrabold text-yellow-900 mb-8 flex items-center gap-4 cursor-default"
+                        className="text-4xl font-extrabold text-yellow-900 mb-8 flex items-center gap-6"
                         whileHover={{ scale: 1.05, y: -5, rotate: -2 }}
                     >
-                        <span className="bg-yellow-300 text-yellow-900 w-14 h-14 flex items-center justify-center rounded-[1.5rem] border-4 border-yellow-500 shadow-inner">2</span> Motion is Relative 🚌
+                        {/* Codepen oNXqJgx Inspired Circular Progress Indicator */}
+                        <div className="relative w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                                <path className="stroke-yellow-200" strokeWidth="4" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                <motion.path
+                                    className="stroke-yellow-500" strokeWidth="4" strokeDasharray="100, 100" fill="none"
+                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    initial={{ strokeDashoffset: 100 }} whileInView={{ strokeDashoffset: 20 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 1.5, ease: "easeInOut" }}
+                                />
+                            </svg>
+                            <div className="absolute text-yellow-900 text-2xl font-black">2</div>
+                        </div>
+                        Motion is Relative 🚌
                     </motion.h2>
 
-                    <div className="rounded-[2.5rem] overflow-hidden mb-10 border-[12px] border-gray-100 shadow-xl transform hover:rotate-1 transition-transform">
+                    <div className="rounded-[2.5rem] overflow-hidden mb-10 border-[12px] border-gray-100 shadow-xl transform group-hover:rotate-1 transition-transform group-hover:scale-[1.02] duration-500">
                         <img src="https://login.skillizee.io/s/articles/69a293bbd32ca8035f1b7aba/images/image-20260228123532-1.png" alt="Motion Diagram" className="w-full h-auto object-cover" />
                     </div>
 
                     <VideoFrame url="YshnFne48pw" />
 
-                    <p className="text-gray-800 text-2xl font-medium mb-10 p-8 bg-pastel-yellow border-4 border-yellow-400 rounded-[2rem] shadow-[0_8px_0_0_rgba(250,204,21,0.5)]">
+                    <p className="text-gray-800 text-2xl font-medium mb-10 p-8 bg-pastel-yellow border-4 border-yellow-400 rounded-[2rem] shadow-[0_8px_0_0_rgba(250,204,21,0.5)] transition-transform group-hover:-translate-y-2">
                         An object can be in motion and at rest at the same time, depending on who is looking at it. This is why we say motion is "relative."
                     </p>
 
@@ -194,7 +227,7 @@ export default function ChapterContent() {
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Inferred Motion - Fluid Glass */}
                 <FluidGlass>
@@ -236,12 +269,11 @@ export default function ChapterContent() {
                             Whether an object is "moving" depends entirely on the Reference Point chosen by the observer. Without a reference point, the word "motion" has no meaning.
                         </p>
                     </div>
-                </FluidGlass>
+                </FluidGlass >
 
                 {/* Gamification Activities Content inline */}
                 <hr className="border-4 border-white/40 rounded-full my-8 mix-blend-overlay" />
                 <ActivitiesContent />
-
             </div>
         </div>
     );
@@ -343,3 +375,5 @@ function ActivitiesContent() {
         </div>
     );
 }
+
+export { ActivitiesContent };
