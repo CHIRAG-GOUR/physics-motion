@@ -62,38 +62,37 @@ export default function BottomProgressRing() {
                 <span className="text-cyan-800 text-[10px] font-bold -mt-1">%</span>
             </div>
 
-            {/* The Ship Icon orbiting along the SVG path */}
+            {/* The Car Icon orbiting along the SVG path */}
             <motion.div
                 className="absolute top-0 bottom-0 left-0 right-0"
                 style={{ rotate: angleRotation }}
             >
-                {/* The ship sits at the top (12 o'clock) of the rotating container */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                {/* The car sits precisely at the top (12 o'clock) of the 40-radius plasma ring (10% from the container top) */}
+                <div className="absolute top-[10%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
 
-                    {/* Ship Thrust Flame */}
+                    {/* Ship Thrust Flame (exhaust behind the car as it drives clockwise) */}
                     <motion.div
-                        className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-2 h-4 bg-pink-500 rounded-full blur-[2px]"
-                        animate={{ height: ["10px", "16px", "10px"], opacity: [0.8, 1, 0.8] }}
+                        className="absolute -left-1 w-3 h-1.5 bg-cyan-300 rounded-full blur-[2px]"
+                        animate={{ width: ["8px", "14px", "8px"], opacity: [0.6, 1, 0.6] }}
                         transition={{ duration: 0.1, repeat: Infinity }}
                     />
 
-                    {/* Car SVG (Top-down view of a futuristic car) */}
-                    <div className="w-8 h-8 bg-white rounded-full border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,1)] flex items-center justify-center -rotate-90">
-                        <svg viewBox="0 0 30 30" className="w-5 h-5 text-cyan-500 fill-current drop-shadow-sm">
-                            {/* Car Body */}
-                            <rect x="8" y="4" width="14" height="22" rx="4" className="text-cyan-600" />
-                            {/* Windshield */}
-                            <path d="M10,9 L20,9 L19,13 L11,13 Z" className="text-white opacity-90" />
-                            {/* Rear Window */}
-                            <path d="M10,21 L20,21 L19,18 L11,18 Z" className="text-white opacity-90" />
-                            {/* Headlights */}
-                            <rect x="9" y="4" width="3" height="2" rx="0.5" className="text-yellow-300" />
-                            <rect x="18" y="4" width="3" height="2" rx="0.5" className="text-yellow-300" />
-                            {/* Taillights */}
-                            <rect x="9" y="24" width="3" height="2" rx="0.5" className="text-red-500" />
-                            <rect x="18" y="24" width="3" height="2" rx="0.5" className="text-red-500" />
-                        </svg>
-                    </div>
+                    {/* Bare Car SVG (Top-down view) rotated to face clockwise (right) */}
+                    <svg viewBox="0 0 30 30" className="w-8 h-8 text-cyan-400 fill-current drop-shadow-[0_0_10px_rgba(34,211,238,1)] z-10 rotate-90">
+                        {/* Car Body */}
+                        <rect x="8" y="4" width="14" height="22" rx="4" className="text-cyan-600" />
+                        {/* Windshield */}
+                        <path d="M10,9 L20,9 L19,13 L11,13 Z" className="text-white opacity-90" />
+                        {/* Rear Window */}
+                        <path d="M10,21 L20,21 L19,18 L11,18 Z" className="text-white opacity-90" />
+                        {/* Headlights */}
+                        <rect x="9" y="4" width="3" height="2" rx="0.5" className="text-yellow-300" />
+                        <rect x="18" y="4" width="3" height="2" rx="0.5" className="text-yellow-300" />
+                        {/* Taillights */}
+                        <rect x="9" y="24" width="3" height="2" rx="0.5" className="text-red-500" />
+                        <rect x="18" y="24" width="3" height="2" rx="0.5" className="text-red-500" />
+                    </svg>
+
                 </div>
             </motion.div>
 
