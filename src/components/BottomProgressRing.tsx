@@ -77,17 +77,21 @@ export default function BottomProgressRing() {
                         transition={{ duration: 0.1, repeat: Infinity }}
                     />
 
-                    {/* Ship SVG (Sci-fi circular ship / drone) */}
-                    <div className="w-8 h-8 bg-white rounded-full border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,1)] flex items-center justify-center rotate-180">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-cyan-500 fill-current">
-                            {/* Drone core */}
-                            <circle cx="12" cy="12" r="5" className="text-cyan-600" />
-                            <circle cx="12" cy="12" r="2" className="text-white" />
-                            {/* Drone wings */}
-                            <path d="M2,12 L7,10 L7,14 Z" />
-                            <path d="M22,12 L17,10 L17,14 Z" />
-                            <path d="M12,2 L10,7 L14,7 Z" />
-                            <path d="M12,22 L10,17 L14,17 Z" />
+                    {/* Car SVG (Top-down view of a futuristic car) */}
+                    <div className="w-8 h-8 bg-white rounded-full border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,1)] flex items-center justify-center -rotate-90">
+                        <svg viewBox="0 0 30 30" className="w-5 h-5 text-cyan-500 fill-current drop-shadow-sm">
+                            {/* Car Body */}
+                            <rect x="8" y="4" width="14" height="22" rx="4" className="text-cyan-600" />
+                            {/* Windshield */}
+                            <path d="M10,9 L20,9 L19,13 L11,13 Z" className="text-white opacity-90" />
+                            {/* Rear Window */}
+                            <path d="M10,21 L20,21 L19,18 L11,18 Z" className="text-white opacity-90" />
+                            {/* Headlights */}
+                            <rect x="9" y="4" width="3" height="2" rx="0.5" className="text-yellow-300" />
+                            <rect x="18" y="4" width="3" height="2" rx="0.5" className="text-yellow-300" />
+                            {/* Taillights */}
+                            <rect x="9" y="24" width="3" height="2" rx="0.5" className="text-red-500" />
+                            <rect x="18" y="24" width="3" height="2" rx="0.5" className="text-red-500" />
                         </svg>
                     </div>
                 </div>
