@@ -112,20 +112,7 @@ export default function ChapterContent() {
 
                     <div className="bg-blue-50/50 border-4 border-blue-100 rounded-[2.5rem] p-10 shadow-inner relative z-10 group/card transition-colors hover:bg-blue-100/50">
                         <h3 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-6">
-
-                            {/* Codepen oNXqJgx Inspired Circular Progress Indicator */}
-                            <div className="relative w-16 h-16 flex items-center justify-center group-hover/card:scale-110 transition-transform">
-                                <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                                    <path className="stroke-blue-200" strokeWidth="4" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                    <motion.path
-                                        className="stroke-blue-600" strokeWidth="4" strokeDasharray="100, 100" fill="none"
-                                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                        initial={{ strokeDashoffset: 100 }} whileInView={{ strokeDashoffset: 60 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 1.5, ease: "easeInOut" }}
-                                    />
-                                </svg>
-                                <div className="absolute text-blue-900 text-2xl font-black">1</div>
-                            </div>
-
+                            <span className="text-blue-600 bg-white px-4 py-2 rounded-xl shadow-sm border-2 border-blue-200">1.</span>
                             <span className="group-hover/card:text-blue-700 transition-colors">Describe the position of an object</span>
                         </h3>
                         <p className="text-gray-800 text-xl mb-8 leading-relaxed bg-white p-8 rounded-[2rem] border-4 border-gray-100 shadow-sm transition-transform hover:-translate-y-2">
@@ -167,18 +154,7 @@ export default function ChapterContent() {
                         className="text-4xl font-extrabold text-yellow-900 mb-8 flex items-center gap-6"
                         whileHover={{ scale: 1.05, y: -5, rotate: -2 }}
                     >
-                        {/* Codepen oNXqJgx Inspired Circular Progress Indicator */}
-                        <div className="relative w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
-                                <path className="stroke-yellow-200" strokeWidth="4" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                                <motion.path
-                                    className="stroke-yellow-500" strokeWidth="4" strokeDasharray="100, 100" fill="none"
-                                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                                    initial={{ strokeDashoffset: 100 }} whileInView={{ strokeDashoffset: 20 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 1.5, ease: "easeInOut" }}
-                                />
-                            </svg>
-                            <div className="absolute text-yellow-900 text-2xl font-black">2</div>
-                        </div>
+                        <span className="bg-white text-yellow-600 px-4 py-2 rounded-xl shadow-sm border-2 border-yellow-200">2.</span>
                         Motion is Relative 🚌
                     </motion.h2>
 
@@ -275,7 +251,7 @@ export default function ChapterContent() {
                 <hr className="border-4 border-white/40 rounded-full my-8 mix-blend-overlay" />
                 <ActivitiesContent />
             </div>
-        </div>
+        </div >
     );
 }
 

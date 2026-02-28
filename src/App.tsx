@@ -5,7 +5,7 @@ import FullscreenButton from './components/FullscreenButton';
 
 function App() {
   return (
-    <div className="w-screen h-screen relative overflow-hidden bg-blue-50/50">
+    <div className="w-full min-h-screen relative bg-blue-50/50">
 
       {/* Global Progress Bar */}
       <TopProgressBar />
@@ -19,7 +19,7 @@ function App() {
       </div>
 
       {/* Continuously Scrolling Main Content Area */}
-      <div className="absolute inset-0 z-10 overflow-x-hidden overflow-y-auto custom-scrollbar" id="scroll-container">
+      <div className="relative z-10 w-full">
         <ChapterContent />
       </div>
     </div>

@@ -20,7 +20,7 @@ export default function TopProgressBar() {
                 style={{ scaleX }}
             >
                 {/* The Car leaving smoke attached to the right edge */}
-                <div className="absolute -right-12 top-1/2 -translate-y-1/2 -scale-x-100 flex items-center">
+                <div className="absolute -right-12 top-1/2 -translate-y-1/2 flex items-center">
 
                     {/* Animated Smoke Trails */}
                     <div className="relative w-16 h-8 -mr-8 flex items-center">
