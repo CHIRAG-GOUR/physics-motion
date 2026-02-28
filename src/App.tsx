@@ -2,6 +2,7 @@ import Scene3D from './components/Scene3D';
 import ChapterContent from './components/ChapterContent';
 import TopProgressBar from './components/TopProgressBar';
 import FullscreenButton from './components/FullscreenButton';
+import BottomProgressRing from './components/BottomProgressRing';
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
 
       {/* Global Fullscreen Toggle */}
       <FullscreenButton />
+
+      {/* Circular Bottom Right Progress Indicator */}
+      <BottomProgressRing />
 
       {/* Full-Screen 3D Background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
