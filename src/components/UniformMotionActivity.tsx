@@ -5,6 +5,7 @@ export default function UniformMotionActivity() {
     const [isUniform, setIsUniform] = useState(true);
     const [isPlaying, setIsPlaying] = useState(false);
     const carControls = useAnimation();
+    const roadControls = useAnimation();
 
     // Graph state: tracking data points over time (seconds -> distance)
     const [dataPoints, setDataPoints] = useState<{ t: number, d: number }[]>([]);
@@ -19,7 +20,9 @@ export default function UniformMotionActivity() {
         setIsPlaying(false);
         setDataPoints([]);
         if (animationRef.current) cancelAnimationFrame(animationRef.current);
-        carControls.set({ x: 0 });
+        carControls.set({ left: '8px' });
+        roadControls.stop();
+        roadControls.set({ backgroundPosition: '0px center' });
     };
 
     const startSimulation = () => {
@@ -71,9 +74,19 @@ export default function UniformMotionActivity() {
 
         // Animate Framer Car
         if (isUniform) {
-            carControls.start({ x: 'calc(100% - 64px)', transition: { duration: maxTime, ease: "linear" } });
+            carControls.start({ left: 'calc(100% - 72px)', transition: { duration: maxTime, ease: "linear" } });
+            // Road moves at constant speed using background-position
+            roadControls.start({
+                backgroundPosition: ['0px center', '-400px center'],
+                transition: { duration: 2, ease: "linear", repeat: Infinity }
+            });
         } else {
-            carControls.start({ x: 'calc(100% - 64px)', transition: { duration: maxTime, ease: "easeIn" } });
+            carControls.start({ left: 'calc(100% - 72px)', transition: { duration: maxTime, ease: "easeIn" } });
+            // Road accelerates using easeIn curve
+            roadControls.start({
+                backgroundPosition: ['0px center', '-2000px center'],
+                transition: { duration: maxTime, ease: "easeIn" }
+            });
         }
     };
 
@@ -131,14 +144,27 @@ export default function UniformMotionActivity() {
                         <span>Finish {maxDist}m</span>
                     </div>
 
-                    <div className="relative w-full h-24 bg-slate-800 rounded-full border-4 border-slate-600 overflow-hidden shadow-inner">
-                        {/* Road lines */}
-                        <div className="absolute top-1/2 w-full border-t-4 border-dashed border-yellow-400 opacity-50"></div>
+                    <div className="relative w-full h-24 bg-slate-800 rounded-full border-4 border-slate-600 overflow-hidden shadow-[inset_0_10px_20px_rgba(0,0,0,0.5)]">
+                        {/* Moving Road stripes */}
+                        <motion.div
+                            animate={roadControls}
+                            className="absolute inset-0 opacity-40 mix-blend-screen"
+                            style={{
+                                backgroundImage: `repeating-linear-gradient(90deg, transparent, transparent 20px, #facc15 20px, #facc15 60px)`,
+                                backgroundSize: '80px 100%',
+                                backgroundPositionY: '50%',
+                                backgroundRepeat: 'repeat-x',
+                                height: '8px',
+                                top: 'calc(50% - 4px)'
+                            }}
+                        />
 
                         {/* The Car */}
                         <motion.div
+                            initial={{ left: '8px' }}
                             animate={carControls}
-                            className="absolute top-2 left-2 w-16 h-16 text-5xl flex items-center justify-center"
+                            className="absolute top-2 w-16 h-16 text-5xl flex items-center justify-center drop-shadow-xl z-10"
+                            style={{ originX: 0.5, originY: 0.5 }}
                         >
                             {isUniform ? '🚙' : '🏎️'}
                         </motion.div>

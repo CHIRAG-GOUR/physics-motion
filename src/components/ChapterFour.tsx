@@ -6,34 +6,41 @@ import UniformMotionActivity from './UniformMotionActivity';
 import LightningDistanceActivity from './LightningDistanceActivity';
 
 // A completely unique, high-energy "Speeding" text animation
-function VelocityHeaderAnimation({ text, colorFrom, colorTo }: { text: string, colorFrom: string, colorTo: string }) {
-    const chars = text.split("");
+function VelocityHeaderAnimation({ lines, colorFrom, colorTo }: { lines: string[], colorFrom: string, colorTo: string }) {
+    let globalIndex = 0;
     return (
-        <h1 className={`text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r ${colorFrom} ${colorTo} font-outfit drop-shadow-[0_5px_15px_rgba(234,88,12,0.5)] mb-4 flex justify-center tracking-tighter flex-wrap overflow-hidden py-4 italic skew-x-[-10deg]`}>
-            {chars.map((char, index) => (
-                <motion.span
-                    key={index}
-                    className="inline-block"
-                    initial={{ x: 200, opacity: 0, scale: 0.5 }}
-                    animate={{ x: 0, opacity: 1, scale: 1 }}
-                    transition={{
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 15,
-                        mass: 0.5,
-                        delay: index * 0.05, // Rapid fire in
-                    }}
-                    whileHover={{
-                        x: [0, 10, -5, 0], // Subtle vibration
-                        skewX: -20,
-                        color: "#fb923c",
-                        transition: { duration: 0.2 }
-                    }}
-                >
-                    {char === " " ? "\u00A0" : char}
-                </motion.span>
+        <div className="flex flex-col items-center gap-0 mb-4">
+            {lines.map((line, lineIndex) => (
+                <h1 key={lineIndex} className={`text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r ${colorFrom} ${colorTo} font-outfit drop-shadow-[0_5px_15px_rgba(234,88,12,0.5)] flex justify-center tracking-tighter flex-wrap overflow-hidden py-1 italic skew-x-[-10deg] leading-none`}>
+                    {line.split("").map((char) => {
+                        const currentIndex = globalIndex++;
+                        return (
+                            <motion.span
+                                key={currentIndex}
+                                className="inline-block"
+                                initial={{ x: 200, opacity: 0, scale: 0.5 }}
+                                animate={{ x: 0, opacity: 1, scale: 1 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 200,
+                                    damping: 15,
+                                    mass: 0.5,
+                                    delay: currentIndex * 0.05, // Rapid fire in
+                                }}
+                                whileHover={{
+                                    x: [0, 10, -5, 0], // Subtle vibration
+                                    skewX: -20,
+                                    color: "#fb923c",
+                                    transition: { duration: 0.2 }
+                                }}
+                            >
+                                {char === " " ? "\u00A0" : char}
+                            </motion.span>
+                        );
+                    })}
+                </h1>
             ))}
-        </h1>
+        </div>
     );
 }
 
@@ -84,7 +91,7 @@ export default function ChapterFour() {
                     <div className="relative z-10 flex flex-col items-center justify-center">
                         <span className="text-xl font-black text-orange-700 tracking-[0.3em] uppercase mb-6 opacity-90 border-4 border-orange-200 bg-orange-100 px-8 py-2 rounded-full shadow-inner transform -skew-x-12">Unit 4</span>
 
-                        <VelocityHeaderAnimation text="SPEED AND VELOCITY" colorFrom="from-orange-600" colorTo="to-red-600" />
+                        <VelocityHeaderAnimation lines={["SPEED &", "VELOCITY"]} colorFrom="from-orange-600" colorTo="to-red-600" />
 
                         <p className="text-2xl md:text-3xl text-gray-800 font-extrabold mt-6 tracking-wide drop-shadow-sm max-w-3xl leading-snug">
                             Measuring the <span className="text-white bg-orange-500 px-3 py-1 rounded-xl shadow-md rotate-2 inline-block">Rate of Motion!</span> Fast, slow, and everywhere in between.
