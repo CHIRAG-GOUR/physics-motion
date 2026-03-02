@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Bus, TreePine, PersonStanding } from 'lucide-react';
 import FluidGlass from './FluidGlass';
+import Interactive3DSimulation from './Interactive3DSimulation';
 
 // Reusable Video Component
 function VideoFrame({ url }: { url: string }) {
@@ -348,6 +349,8 @@ function ActivitiesContent() {
                     </div>
                 </div>
             </div>
+
+            <Interactive3DSimulation />
         </div>
     );
 }
