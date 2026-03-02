@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Scene3D from './components/Scene3D';
-import ChapterContent from './components/ChapterContent';
-import ChapterTwo from './components/ChapterTwo';
+import ChapterContent from './components/ChapterContent'; // Chapter 1.1
+import ChapterTwo from './components/ChapterTwo';       // Chapter 1.2
+import ChapterThree from './components/ChapterThree';   // Chapter 1.3
 import TopProgressBar from './components/TopProgressBar';
 import FullscreenButton from './components/FullscreenButton';
 import BottomProgressRing from './components/BottomProgressRing';
@@ -29,9 +30,10 @@ function App() {
         {/* Main Content Rendered by Route */}
         <div className="relative z-10 w-full pt-10">
           <Routes>
-            <Route path="/" element={<Navigate to="/chapter-1" replace />} />
-            <Route path="/chapter-1" element={<ChapterContent />} />
-            <Route path="/chapter-2" element={<ChapterTwo />} />
+            <Route path="/" element={<Navigate to="/chapter-1.1" replace />} />
+            <Route path="/chapter-1.1" element={<ChapterContent />} />
+            <Route path="/chapter-1.2" element={<ChapterTwo />} />
+            <Route path="/chapter-1.3" element={<ChapterThree />} />
           </Routes>
         </div>
 
