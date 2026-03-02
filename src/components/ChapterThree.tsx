@@ -7,23 +7,27 @@ import DisplacementVectorActivity from './DisplacementVectorActivity';
 
 // VideoFrame removed as there are no videos currently needed for Chapter 3
 
-function WaveText({ text, colorFrom, colorTo }: { text: string, colorFrom: string, colorTo: string }) {
+function FlipRevealText({ text, colorFrom, colorTo }: { text: string, colorFrom: string, colorTo: string }) {
     const chars = text.split("");
     return (
-        <h1 className={`text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${colorFrom} ${colorTo} font-outfit drop-shadow-sm mb-4 flex justify-center tracking-tight flex-wrap`}>
+        <h1 className={`text-6xl md:text-8xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${colorFrom} ${colorTo} font-outfit drop-shadow-md mb-4 flex justify-center tracking-tight flex-wrap perspective-1000`}>
             {chars.map((char, index) => (
                 <motion.span
                     key={index}
-                    className="inline-block"
-                    animate={{
-                        y: [0, -15, 0],
-                        rotate: [0, index % 2 === 0 ? 3 : -3, 0]
-                    }}
+                    className="inline-block origin-bottom"
+                    initial={{ rotateX: 90, opacity: 0, y: 20 }}
+                    animate={{ rotateX: 0, opacity: 1, y: 0 }}
                     transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
+                        type: "spring",
+                        stiffness: 150,
+                        damping: 10,
                         delay: index * 0.1,
+                    }}
+                    whileHover={{
+                        scale: 1.15,
+                        y: -10,
+                        rotateZ: index % 2 === 0 ? 3 : -3,
+                        transition: { type: "spring", stiffness: 300 }
                     }}
                 >
                     {char === " " ? "\u00A0" : char}
@@ -57,7 +61,7 @@ export default function ChapterThree() {
 
                     <div className="relative z-10 flex flex-col items-center justify-center">
                         <span className="text-xl font-bold text-teal-700 tracking-[0.2em] uppercase mb-6 opacity-80 border-2 border-teal-200 bg-teal-50 px-6 py-2 rounded-full">Unit 3</span>
-                        <WaveText text="DISPLACEMENT" colorFrom="from-teal-600" colorTo="to-emerald-500" />
+                        <FlipRevealText text="DISPLACEMENT" colorFrom="from-teal-600" colorTo="to-emerald-500" />
                         <p className="text-2xl md:text-3xl text-gray-700 font-bold mt-6 tracking-wide drop-shadow-sm max-w-3xl">
                             The <span className="text-teal-600 bg-teal-50 px-2 rounded-lg border border-teal-200">shortest straight-line</span> distance between initial and final positions.
                         </p>

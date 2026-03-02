@@ -26,26 +26,30 @@ function VideoFrame({ url }: { url: string }) {
     );
 }
 
-function WaveText({ text, colorFrom, colorTo }: { text: string, colorFrom: string, colorTo: string }) {
+function StaggerPopText({ text, colorFrom, colorTo }: { text: string, colorFrom: string, colorTo: string }) {
     const words = text.split(" ");
 
     return (
-        <h1 className={`text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${colorFrom} ${colorTo} font-outfit drop-shadow-sm leading-tight text-center flex flex-wrap justify-center gap-4`}>
+        <h1 className={`text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r ${colorFrom} ${colorTo} font-outfit drop-shadow-md leading-tight text-center flex flex-wrap justify-center gap-4`}>
             {words.map((word, wordIndex) => (
                 <span key={wordIndex} className="flex">
                     {word.split("").map((char, charIndex) => (
                         <motion.span
                             key={`${wordIndex}-${charIndex}`}
                             className="inline-block"
-                            animate={{
-                                y: [0, -10, 0],
-                                rotate: [0, charIndex % 2 === 0 ? 2 : -2, 0]
-                            }}
+                            initial={{ scale: 0, opacity: 0, y: 50 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
                             transition={{
-                                duration: 1.5,
-                                repeat: Infinity,
-                                ease: "easeInOut",
-                                delay: (wordIndex * 5 + charIndex) * 0.05,
+                                type: "spring",
+                                damping: 12,
+                                stiffness: 200,
+                                delay: (wordIndex * 5 + charIndex) * 0.08, // Staggered delay
+                            }}
+                            whileHover={{
+                                scale: 1.2,
+                                rotate: charIndex % 2 === 0 ? 5 : -5,
+                                color: "#ec4899", // pop to pink
+                                transition: { duration: 0.2 }
                             }}
                         >
                             {char === " " ? "\u00A0" : char}
@@ -86,8 +90,8 @@ export default function ChapterTwo() {
                             <span className="text-6xl text-purple-600 font-extrabold px-6 py-2 bg-purple-100/80 rounded-3xl border-4 border-purple-200 shadow-sm drop-shadow-md">
                                 2.
                             </span>
-                            <div className="flex-1 max-w-4xl">
-                                <WaveText text="Distance and Displacement" colorFrom="from-purple-700" colorTo="to-pink-600" />
+                            <div className="flex-1 max-w-4xl pt-4"> {/* Added padding to prevent cutoff */}
+                                <StaggerPopText text="Distance and Displacement" colorFrom="from-purple-700" colorTo="to-pink-600" />
                             </div>
                         </div>
                         <p className="text-2xl md:text-3xl text-gray-700 font-bold text-center mt-6 tracking-wide drop-shadow-sm">
