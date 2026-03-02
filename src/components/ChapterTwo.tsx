@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Ruler, RefreshCw } from 'lucide-react';
 import FluidGlass from './FluidGlass';
+import ChapterFooter from './ChapterFooter';
+import InteractivePathActivity from './InteractivePathActivity';
 
 // Reusable Video Component
 function VideoFrame({ url }: { url: string }) {
@@ -24,60 +26,7 @@ function VideoFrame({ url }: { url: string }) {
     );
 }
 
-// Interactive Mini-game: Distance vs Displacement
-function DistanceDisplacementActivity() {
-    return (
-        <div className="p-12 rounded-[3.5rem] bg-white border-8 border-purple-200 shadow-[0_20px_0_0_rgba(233,213,255,1)] hover:-translate-y-2 transition-transform duration-300 mt-16 w-full">
-            <h3 className="text-4xl font-extrabold text-gray-800 mb-6 text-center">Activity 1: Distance vs Displacement</h3>
-            <p className="text-xl text-gray-600 font-medium text-center max-w-2xl mx-auto mb-10">
-                You walk from Home (O) to School (A), and then back to the Park (B). Drag the slider to see how your Distance and Displacement change!
-            </p>
-
-            {/* This will be an interactive slider or clickable path in the future. For now, we simulate the UI */}
-            <div className="w-full max-w-3xl mx-auto bg-slate-50 p-8 rounded-3xl border-[4px] border-slate-200 relative overflow-hidden">
-                <div className="h-4 bg-gray-300 rounded-full w-full relative mb-16">
-                    {/* Points */}
-                    <div className="absolute top-1/2 -translate-y-1/2 left-[5%] flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-blue-500 border-4 border-white shadow-md z-10" />
-                        <span className="mt-4 font-bold text-xl text-gray-700">O (0km)</span>
-                        <span className="text-sm text-gray-500 font-medium">Home</span>
-                    </div>
-                    <div className="absolute top-1/2 -translate-y-1/2 left-[40%] flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-green-500 border-4 border-white shadow-md z-10" />
-                        <span className="mt-4 font-bold text-xl text-gray-700">B (35km)</span>
-                        <span className="text-sm text-gray-500 font-medium">Park</span>
-                    </div>
-                    <div className="absolute top-1/2 -translate-y-1/2 left-[95%] flex flex-col items-center">
-                        <div className="w-8 h-8 rounded-full bg-red-500 border-4 border-white shadow-md z-10" />
-                        <span className="mt-4 font-bold text-xl text-gray-700">A (60km)</span>
-                        <span className="text-sm text-gray-500 font-medium">School</span>
-                    </div>
-
-                    {/* Path traces */}
-                    <motion.div
-                        className="absolute top-0 bottom-0 left-[5%] right-[5%] bg-blue-400 rounded-full opacity-50"
-                        initial={{ scaleX: 0, transformOrigin: "left" }}
-                        animate={{ scaleX: 1 }}
-                        transition={{ duration: 2, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", repeatDelay: 1 }}
-                    />
-                </div>
-
-                <div className="grid grid-cols-2 gap-8 mt-12">
-                    <div className="bg-white p-6 rounded-2xl border-[4px] border-blue-100 shadow-sm text-center">
-                        <h4 className="text-2xl font-bold text-gray-800 mb-2">Total Distance</h4>
-                        <p className="text-4xl font-extrabold text-blue-600">85 km</p>
-                        <p className="text-sm font-medium text-gray-500 mt-2">OA (60km) + AB (25km)</p>
-                    </div>
-                    <div className="bg-white p-6 rounded-2xl border-[4px] border-green-100 shadow-sm text-center">
-                        <h4 className="text-2xl font-bold text-gray-800 mb-2">Displacement</h4>
-                        <p className="text-4xl font-extrabold text-green-600">35 km</p>
-                        <p className="text-sm font-medium text-gray-500 mt-2">Shortest path from O to B</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
+// Removed the mock DistanceDisplacementActivity in favor of the imported InteractivePathActivity.
 
 export default function ChapterTwo() {
     return (
@@ -180,7 +129,7 @@ export default function ChapterTwo() {
             </div>
 
             {/* Interactive Component */}
-            <DistanceDisplacementActivity />
+            <InteractivePathActivity />
 
             {/* Physical Activity Box */}
             <div className="mt-16 p-10 bg-yellow-50 rounded-[3rem] border-8 border-yellow-200 shadow-lg relative overflow-hidden">
@@ -196,6 +145,7 @@ export default function ChapterTwo() {
                 </ul>
             </div>
 
+            <ChapterFooter chapterName="2 ⏤ Distance" />
         </div>
     );
 }

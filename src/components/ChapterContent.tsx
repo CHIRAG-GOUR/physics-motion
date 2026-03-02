@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Bus, TreePine, PersonStanding } from 'lucide-react';
 import FluidGlass from './FluidGlass';
 import Interactive3DSimulation from './Interactive3DSimulation';
+import ChapterFooter from './ChapterFooter';
 
 // Reusable Video Component
 function VideoFrame({ url }: { url: string }) {
@@ -351,6 +352,8 @@ function ActivitiesContent() {
             </div>
 
             <Interactive3DSimulation />
+
+            <ChapterFooter chapterName="1 ⏤ Motion" />
         </div>
     );
 }
