@@ -9,6 +9,7 @@ export default function UniformMotionActivity() {
 
     // Graph state: tracking data points over time (seconds -> distance)
     const [dataPoints, setDataPoints] = useState<{ t: number, d: number }[]>([]);
+    const [currentSpeed, setCurrentSpeed] = useState<number>(0);
     const animationRef = useRef<number | null>(null);
     const startTimeRef = useRef<number | null>(null);
 
@@ -19,6 +20,7 @@ export default function UniformMotionActivity() {
     const resetSimulation = () => {
         setIsPlaying(false);
         setDataPoints([]);
+        setCurrentSpeed(0);
         if (animationRef.current) cancelAnimationFrame(animationRef.current);
         carControls.set({ left: '8px' });
         roadControls.stop();
@@ -46,10 +48,12 @@ export default function UniformMotionActivity() {
                 // Uniform: Constant speed v = distance / time -> d = v * t
                 // Let's say v = 10 m/s
                 currentDist = 10 * elapsedTime;
+                setCurrentSpeed(10);
             } else {
                 // Non-Uniform: Accelerating -> d = 0.5 * a * t^2
-                // Let's say a = 2 m/s^2 -> d = t^2
+                // Let's say a = 2 m/s^2 -> d = t^2. Speed v = a*t = 2*t
                 currentDist = Math.pow(elapsedTime, 2);
+                setCurrentSpeed(2 * elapsedTime);
             }
 
             // Move the car visually
@@ -58,7 +62,7 @@ export default function UniformMotionActivity() {
             // Only update data points a few times per second to prevent UI lag
             setDataPoints(prev => {
                 const lastPoint = prev[prev.length - 1];
-                if (!lastPoint || elapsedTime - lastPoint.t > 0.2) {
+                if (!lastPoint || elapsedTime - lastPoint.t > 0.1) {
                     return [...prev, { t: elapsedTime, d: currentDist }];
                 }
                 return prev;
@@ -97,17 +101,6 @@ export default function UniformMotionActivity() {
         };
     }, []);
 
-    // Helper for SVG Graph drawing
-    const createPath = () => {
-        if (dataPoints.length === 0) return "";
-        return dataPoints.map((point, i) => {
-            // Map t (0-maxTime) to X px (0-300)
-            const x = (point.t / maxTime) * 300;
-            // Map d (0-maxDist) to Y px (0-200), invert Y for SVG drawing
-            const y = 200 - ((point.d / maxDist) * 200);
-            return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-        }).join(" ");
-    };
 
     return (
         <div className="w-full bg-white p-12 rounded-[3.5rem] border-8 border-cyan-200 shadow-xl mb-16 relative overflow-hidden">
@@ -135,94 +128,156 @@ export default function UniformMotionActivity() {
             </div>
 
             {/* Simulation Arena */}
-            <div className="flex flex-col md:flex-row gap-12 items-center justify-center">
+            <div className="flex flex-col gap-12">
 
-                {/* Physical Track */}
-                <div className="w-full md:w-1/2 flex flex-col gap-4 bg-slate-50 p-6 rounded-3xl border-[4px] border-slate-200">
-                    <div className="flex justify-between font-bold text-slate-400 mb-2">
-                        <span>Start 0m</span>
-                        <span>Finish {maxDist}m</span>
+                {/* Physical Track & Speedometer Container */}
+                <div className="w-full flex flex-col md:flex-row gap-8 bg-slate-50 p-8 rounded-3xl border-[4px] border-slate-200">
+
+                    {/* Live Speedometer */}
+                    <div className="flex-shrink-0 w-full md:w-64 bg-slate-800 rounded-3xl p-6 flex flex-col items-center justify-center border-4 border-slate-700 shadow-inner relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-slate-700 to-slate-900 opacity-50"></div>
+                        <h5 className="text-slate-400 font-bold tracking-widest uppercase mb-2 relative z-10 text-sm">Speedometer</h5>
+
+                        <div className="w-32 h-32 rounded-full border-8 border-slate-600 flex items-center justify-center relative z-10 bg-slate-800 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+                            {/* Speed indicator fill */}
+                            <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="none" stroke="#334155" strokeWidth="8" />
+                                <circle
+                                    cx="50"
+                                    cy="50"
+                                    r="40"
+                                    fill="none"
+                                    stroke={isUniform ? "#06b6d4" : "#f43f5e"} // Cyan or Rose
+                                    strokeWidth="8"
+                                    strokeDasharray="251.2"
+                                    strokeDashoffset={251.2 - (Math.min(currentSpeed / 20, 1) * 251.2)} // Max speed ~20 for circle fill
+                                    className="transition-all duration-100 ease-linear"
+                                />
+                            </svg>
+                            <div className="flex flex-col items-center justify-center">
+                                <span className={`text-3xl font-black ${isUniform ? 'text-cyan-400' : 'text-rose-400'} font-mono`}>
+                                    {Math.round(currentSpeed)}
+                                </span>
+                                <span className="text-slate-500 font-bold text-xs">m/s</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="relative w-full h-24 bg-slate-800 rounded-full border-4 border-slate-600 overflow-hidden shadow-[inset_0_10px_20px_rgba(0,0,0,0.5)]">
-                        {/* Moving Road stripes */}
-                        <motion.div
-                            animate={roadControls}
-                            className="absolute inset-0 opacity-40 mix-blend-screen"
-                            style={{
-                                backgroundImage: `repeating-linear-gradient(90deg, transparent, transparent 20px, #facc15 20px, #facc15 60px)`,
-                                backgroundSize: '80px 100%',
-                                backgroundPositionY: '50%',
-                                backgroundRepeat: 'repeat-x',
-                                height: '8px',
-                                top: 'calc(50% - 4px)'
-                            }}
-                        />
+                    {/* Track Section */}
+                    <div className="flex-grow flex flex-col gap-4 justify-center relative">
+                        <div className="flex justify-between font-bold text-slate-400 mb-2">
+                            <span>Start 0m</span>
+                            <span>Finish {maxDist}m</span>
+                        </div>
 
-                        {/* The Car */}
-                        <motion.div
-                            initial={{ left: '8px' }}
-                            animate={carControls}
-                            className="absolute top-2 w-16 h-16 text-5xl flex items-center justify-center drop-shadow-xl z-10"
-                            style={{ originX: 0.5, originY: 0.5 }}
+                        <div className="relative w-full h-24 bg-slate-800 rounded-full border-4 border-slate-600 overflow-hidden shadow-[inset_0_10px_20px_rgba(0,0,0,0.5)]">
+                            {/* Moving Road stripes */}
+                            <motion.div
+                                animate={roadControls}
+                                className={`absolute inset-0 opacity-40 mix-blend-screen transition-all duration-1000 ${isUniform ? '' : 'blur-[1px]'}`}
+                                style={{
+                                    backgroundImage: `repeating-linear-gradient(90deg, transparent, transparent 20px, #facc15 20px, #facc15 60px)`,
+                                    backgroundSize: '80px 100%',
+                                    backgroundPositionY: '50%',
+                                    backgroundRepeat: 'repeat-x',
+                                    height: '8px',
+                                    top: 'calc(50% - 4px)'
+                                }}
+                            />
+
+                            {/* The Car - Flipped explicitly to ensure it points forward */}
+                            <motion.div
+                                initial={{ left: '8px' }}
+                                animate={carControls}
+                                className="absolute top-2 w-16 h-16 text-5xl flex items-center justify-center drop-shadow-xl z-20"
+                                style={{ originX: 0.5, originY: 0.5, scaleX: -1 }} // Emoji cars face left default, scaleX -1 flips to right
+                            >
+                                {isUniform ? '🚙' : '🏎️'}
+                            </motion.div>
+                        </div>
+
+                        <button
+                            onClick={startSimulation}
+                            disabled={isPlaying}
+                            className={`py-4 rounded-2xl font-black text-2xl uppercase tracking-widest text-white shadow-lg transition-transform ${isPlaying ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 hover:-translate-y-1'}`}
                         >
-                            {isUniform ? '🚙' : '🏎️'}
-                        </motion.div>
+                            {isPlaying ? 'Driving...' : 'DRIVE! 🏁'}
+                        </button>
                     </div>
-
-                    <button
-                        onClick={startSimulation}
-                        disabled={isPlaying}
-                        className={`mt-4 py-3 rounded-2xl font-bold text-xl uppercase tracking-widest text-white shadow-lg transition-transform ${isPlaying ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600 hover:-translate-y-1'}`}
-                    >
-                        {isPlaying ? 'Driving...' : 'DRIVE! 🏁'}
-                    </button>
                 </div>
 
-                {/* Graphing Screen */}
-                <div className="w-full md:w-1/2">
-                    <div className="bg-[#f8fafc] p-6 rounded-[2.5rem] border-8 border-slate-300 shadow-md relative">
-                        <div className="absolute -left-12 top-1/2 -rotate-90 font-bold text-slate-500 tracking-widest uppercase">Distance (m)</div>
-                        <div className="absolute bottom-[-10px] left-1/2 -translate-x-1/2 font-bold text-slate-500 tracking-widest uppercase">Time (s)</div>
+                {/* Graphing Screen - Full Width Below */}
+                <div className="w-full mt-12 bg-[#f8fafc] p-10 rounded-[2.5rem] border-8 border-slate-300 shadow-md relative">
+                    <h4 className="text-3xl font-extrabold text-slate-700 text-center mb-8">Real-time Distance vs Time Graph</h4>
 
-                        {/* Graph Canvas */}
-                        <svg className="w-full aspect-[3/2] bg-white border-l-4 border-b-4 border-slate-400 rounded-bl-sm overflow-visible" viewBox="0 0 300 200">
-                            {/* Grid markers */}
-                            <line x1={0} y1={200} x2={300} y2={200} stroke="#94a3b8" strokeWidth={4} />
-                            <line x1={0} y1={0} x2={0} y2={200} stroke="#94a3b8" strokeWidth={4} />
+                    <div className="flex flex-col lg:flex-row gap-12 items-center">
+                        <div className="relative w-full lg:w-2/3">
+                            <div className="absolute -left-16 top-1/2 -rotate-90 font-bold text-slate-500 tracking-widest uppercase">Distance (m)</div>
+                            <div className="absolute bottom-[-30px] left-1/2 -translate-x-1/2 font-bold text-slate-500 tracking-widest uppercase">Time (s)</div>
 
-                            {/* Dynamic Plot Line */}
-                            {dataPoints.length > 0 && (
-                                <motion.path
-                                    d={createPath()}
-                                    fill="none"
-                                    stroke={isUniform ? "#06b6d4" : "#6366f1"} // Cyan vs Indigo
-                                    strokeWidth="6"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    initial={{ pathLength: 0 }}
-                                    animate={{ pathLength: 1 }}
-                                    transition={{ duration: 0.2 }}
-                                />
-                            )}
-                        </svg>
+                            {/* Graph Canvas */}
+                            <svg className="w-full aspect-[21/9] bg-white border-l-4 border-b-4 border-slate-400 rounded-bl-sm overflow-visible" viewBox="0 0 600 250">
+                                {/* Grid markers */}
+                                <line x1={0} y1={250} x2={600} y2={250} stroke="#94a3b8" strokeWidth={4} />
+                                <line x1={0} y1={0} x2={0} y2={250} stroke="#94a3b8" strokeWidth={4} />
+
+                                {/* Grid lines internal */}
+                                {[1, 2, 3, 4, 5].map(i => (
+                                    <line key={`h-${i}`} x1={0} y1={i * 50} x2={600} y2={i * 50} stroke="#e2e8f0" strokeWidth={2} strokeDasharray="4" />
+                                ))}
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(i => (
+                                    <line key={`v-${i}`} x1={i * 50} y1={0} x2={i * 50} y2={250} stroke="#e2e8f0" strokeWidth={2} strokeDasharray="4" />
+                                ))}
+
+                                {/* Dynamic Plot Line */}
+                                {dataPoints.length > 0 && (
+                                    <motion.path
+                                        d={dataPoints.map((point, i) => {
+                                            const x = (point.t / maxTime) * 600;
+                                            const y = 250 - ((point.d / maxDist) * 250);
+                                            return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
+                                        }).join(" ")}
+                                        fill="none"
+                                        stroke={isUniform ? "#06b6d4" : "#f43f5e"} // Cyan vs Rose
+                                        strokeWidth="6"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                )}
+                            </svg>
+                        </div>
 
                         {/* Analysis Output Box */}
-                        <div className="mt-6 p-4 rounded-xl bg-slate-100 border-2 border-slate-200">
-                            <h5 className="font-extrabold text-slate-700 mb-1">Graph Shape:</h5>
-                            {dataPoints.length > 5 ? (
-                                isUniform ? (
-                                    <p className="text-xl font-bold text-cyan-600 bg-cyan-50 p-2 rounded-lg text-center shadow-sm">📏 Straight Line = Uniform Motion</p>
+                        <div className="w-full lg:w-1/3 flex flex-col justify-center">
+                            <div className="p-8 rounded-[2rem] bg-white border-4 border-slate-200 shadow-lg">
+                                <h5 className="font-extrabold text-slate-700 mb-4 text-2xl">Graph Analysis</h5>
+                                {dataPoints.length > 5 ? (
+                                    isUniform ? (
+                                        <div className="animate-fade-in space-y-4">
+                                            <p className="text-2xl font-black text-cyan-600 bg-cyan-50 p-4 rounded-2xl text-center border-2 border-cyan-100 shadow-inner">
+                                                📏 Straight Line<br />
+                                                <span className="text-lg font-bold">Constant Speed</span>
+                                            </p>
+                                            <p className="text-slate-600 font-medium">Because the speed never changes (always 10m/s), the distance increases at a steady, perfectly linear rate!</p>
+                                        </div>
+                                    ) : (
+                                        <div className="animate-fade-in space-y-4">
+                                            <p className="text-2xl font-black text-rose-600 bg-rose-50 p-4 rounded-2xl text-center border-2 border-rose-100 shadow-inner">
+                                                📈 Curved Line<br />
+                                                <span className="text-lg font-bold">Speeding Up!</span>
+                                            </p>
+                                            <p className="text-slate-600 font-medium">The speed constantly increases (accelerating!). Therefore, the distance covered every second gets larger and larger, curving the graph upwards!</p>
+                                        </div>
+                                    )
                                 ) : (
-                                    <p className="text-xl font-bold text-indigo-600 bg-indigo-50 p-2 rounded-lg text-center shadow-sm">📈 Curved Line = Non-Uniform</p>
-                                )
-                            ) : (
-                                <p className="text-slate-400 italic text-center">Awaiting data...</p>
-                            )}
+                                    <div className="h-32 flex items-center justify-center text-slate-400 italic">
+                                        Click DRIVE to analyze...
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     );
