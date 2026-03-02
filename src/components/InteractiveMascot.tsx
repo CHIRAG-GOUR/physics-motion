@@ -43,9 +43,20 @@ export default function InteractiveMascot() {
         ];
         gradientStyle = "from-emerald-500 to-teal-400";
         mascotFace = "😎";
+    } else if (location.pathname.includes("chapter-1.4")) {
+        // Speed and Velocity
+        funFacts = [
+            "Whoosh! Speed is just distance divided by time! 🏎️",
+            "Did you know? The speed of light is the ultimate speed limit: 300,000 km per second! ⚡",
+            "A speedometer shows Instantaneous Speed, but calculating your total trip is Average Speed! ⏱️",
+            "Velocity is just Speed WITH a direction! Turning corners means changing velocity! 🔄",
+            "Thunder takes 3 seconds to travel 1 kilometer! ⛈️"
+        ];
+        gradientStyle = "from-orange-500 to-red-400";
+        mascotFace = "🏎️";
     } else {
         // Fallback
-        funFacts = ["Physics is awesome! ⚛️"];
+        funFacts = ["Motion is everywhere! Keep exploring! ⚛️"];
         gradientStyle = "from-gray-500 to-slate-400";
         mascotFace = "🧐";
     }
